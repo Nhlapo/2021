@@ -1,0 +1,85 @@
+
+
+<div class="container">
+    <form class="shadow-lg p-3 mb-5 bg-light rounded" [formGroup]="adminLogin" (ngSubmit)="adminReg()" novalidate>
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+                <h2 class="text-center panel-title">{{title}}</h2>
+                <div class="text-center bg-succes">
+                    <hr>
+                    {{adminservice.date | date:'fullDate'}}
+                    <hr>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <div *ngIf="setError" class="text-center alert alert-danger">{{setError}}</div>
+
+                <div class="form-group">
+                    <label class="control-label" for="adm_id">Staff Number</label>
+
+
+                    <input type="text" class="form-control mr-sm-2" id="adm_id" formControlName="adm_id"
+                    [ngClass]="{'is-invalid': (submitted || (adminLogin.get('adm_id').touched ||
+                adminLogin.get('adm_id').dirty) && adminLogin.get('adm_id').errors)}" placeholder="Enter Staff Number" />
+
+                    <span class="invalid-feedback" *ngIf="(submitted || (adminLogin.get('adm_id').touched ||
+                                 adminLogin.get('adm_id').dirty) && adminLogin.get('adm_id').errors )">
+                        <span *ngIf="adminLogin.get('adm_id').errors?.required">
+                            Student Number is required
+                        </span>
+                        <span *ngIf="adminLogin.get('adm_id').errors?.minlength">
+                            Student Number is less than 9 digits
+                        </span>
+                        <span *ngIf="adminLogin.get('adm_id').errors?.maxlength">
+                            Student Number must be 9 digits
+                        </span>
+                        <span *ngIf="adminLogin.get('adm_id').errors?.pattern">
+                            And Only numbers are allowed
+                        </span>
+                    </span>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="password">Password</label>
+
+                    <input type="password" class="form-control mr-sm-2" id="password" [ngClass]="{ 'is-invalid': 
+                            (submitted || (adminLogin.get('password').touched ||
+                            adminLogin.get('password').dirty) &&
+                            adminLogin.get('password').errors)}" formControlName="password"
+                        placeholder="Enter Password" />
+
+                    <span class="invalid-feedback" *ngIf="(submitted || (adminLogin.get('password').touched ||
+                            adminLogin.get('password').dirty) && adminLogin.get('password').errors )">
+                        <span *ngIf="adminLogin.get('password').errors?.required">
+                            Password is required
+                        </span>
+                        <span *ngIf="adminLogin.get('password').errors?.minlength">
+                            Password must not be less than 8 characters
+                        </span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="panel-footer form-row">
+
+                <div class="form-group col-md-4">
+                    <button [disabled]=" loading || !adminLogin.valid" type="submit" 
+                        class="btn btn-primary btn-lg btn-block shadow p-3 mb-5 rounded bg-info">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Login
+                    </button>
+                </div>
+                <div class="form-group col-md-4">
+                    <button type="reset" class="btn btn-lg btn-block shadow p-3 mb-5 rounded">
+                        Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<br>

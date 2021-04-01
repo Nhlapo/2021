@@ -1,0 +1,148 @@
+<div class="container">
+    <form class="shadow-lg p-3 mb-5 bg-light rounded" [formGroup]="loginFmgroup" novalidate>
+
+        <div class="panel panel-primary">
+
+            <div class="panel-heading">
+                <h2 class="text-center panel-title">{{title}}</h2>
+                <div class="text-center bg-succes">
+                    <hr>{{appServ.date | date:'fullDate'}}
+                    <hr>
+                </div>
+            </div>
+            <div class="panel-body">
+
+                <div *ngIf="setError" class="text-center alert alert-danger">{{setError}}</div>
+
+                <div class="form-group">
+                    <label class="control-label" for="student_id">Student Number</label>
+                    <input type="text" class="form-control mr-sm-2" id="student_id" formControlName="student_id"
+                        [ngClass]="{'is-invalid': (submitted || (loginFmgroup.get('student_id').touched ||
+                        loginFmgroup.get('student_id').dirty) &&
+                        loginFmgroup.get('student_id').errors)}" placeholder="Enter Student Number"
+                        autocomplete="off" />
+
+                    <span class="invalid-feedback" *ngIf="(submitted || (loginFmgroup.get('student_id').touched ||
+                                 loginFmgroup.get('student_id').dirty) && loginFmgroup.get('student_id').errors )">
+                        <span *ngIf="loginFmgroup.get('student_id').errors?.required">
+                            Student Number is required
+                        </span>
+
+                        <span *ngIf="loginFmgroup.get('student_id').errors?.minlength">
+                            Student Number is less than 9 digits
+                        </span>
+                        <span *ngIf="loginFmgroup.get('student_id').errors?.maxlength">
+                            Student Number must be 9 digits
+                        </span>
+                        <span *ngIf="loginFmgroup.get('student_id').errors?.pattern">
+                            And Only numbers are allowed
+                        </span>
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label" for="student_password">Password</label>
+                    <input type="password" class="form-control mr-sm-2" id="student_password" [ngClass]="{ 'is-invalid': 
+                            (submitted || (loginFmgroup.get('student_password').touched ||
+                            loginFmgroup.get('student_password').dirty) &&
+                            loginFmgroup.get('student_password').errors)}" formControlName="student_password"
+                        placeholder="Enter Password" autocomplete="off" />
+
+                    <span class="invalid-feedback"
+                        *ngIf="(submitted || (loginFmgroup.get('student_password').touched ||
+                            loginFmgroup.get('student_password').dirty) && loginFmgroup.get('student_password').errors )">
+
+                        <span *ngIf="loginFmgroup.get('student_password').errors?.required">
+                            Password is required
+                        </span>
+                        <span
+                            *ngIf="loginFmgroup.get('student_password').errors?.minlength || loginFmgroup.get('student_password').errors?.maxlength">
+                            Password must not be less than 8 characters
+                        </span>
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="panel-footer form-row">
+                <!-- loading || !loginFmgroup.valid
+                && loginFmgroup.get('student_password').errors)
+                     && loginFmgroup.get('student_password').errors)
+                -->
+
+                <div class="form-group col-md-4">
+                    <button [disabled]="loading "
+                        type="submit" data-toggle="modal" data-target="#otpModal" (click)="requestOTP()"
+                        data-backdrop="static" data-keyboard="false"
+                        class="btn btn-outline-primary btn-lg btn-block shadow rounded">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Login
+                    </button>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <button type="reset" class="btn btn-outline-secondary btn-lg btn-block shadow rounded">
+                        Clear
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="modal fade" tabindex="-1" role="dialog" id="otpModal">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Authentication using One Time Pin(OTP)</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <h6>Your One Time Pin(OTP) has been send to your tut4life email <br>
+                            Please enter the OTP below</h6>
+                        <div class="alert alert-info">
+                            <div class="form-group">
+                                <label class="control-label" for="OTP">One Time Pin(OTP)</label>
+
+                                <input type="text" class="form-control mr-sm-2" id="OTP" formControlName="OTP"
+                                    [ngClass]="{ 'is-invalid': 
+                                        (submitted || (loginFmgroup.get('OTP').touched || loginFmgroup.get('OTP').dirty) && 
+                                        loginFmgroup.get('OTP').errors)}" placeholder="Enter One Time Pin(OTP)" />
+
+                                <span class="invalid-feedback" *ngIf="(submitted || (loginFmgroup.get('OTP').touched ||
+                                            loginFmgroup.get('OTP').dirty) && loginFmgroup.get('OTP').errors )">
+                                    <span *ngIf="loginFmgroup.get('OTP').errors?.required">
+                                        One Time Pin(OTP) is required
+                                    </span>
+                                    <span *ngIf="loginFmgroup.get('OTP').errors?.minlength">
+                                        OTP is less than 4 digits
+                                    </span>
+                                    <span *ngIf="loginFmgroup.get('OTP').errors?.maxlength">
+                                        OTP must be 4 digits
+                                    </span>
+                                    <span *ngIf="loginFmgroup.get('OTP').errors?.pattern">
+                                        And Only numbers are allowed
+                                    </span>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" (click)="onSubmit()" data-dismiss="modal" [disabled]="!loginFmgroup.valid"
+                            class="btn btn-outline-primary btn-lg btn-block shadow rounded">Submit</button>
+                        <button type="submit" (click)="requestOTP()"
+                            class="btn btn-outline-dark btn-lg btn-block shadow rounded">Resend</button>
+                        <button type="reset" class="btn btn-outline-secondary btn-lg btn-block shadow rounded"
+                            data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
